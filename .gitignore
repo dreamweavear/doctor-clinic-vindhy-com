@@ -1,0 +1,50 @@
+# CodeIgniter 4 .gitignore
+
+# Environment files
+.env
+.env.example
+
+# Writable directory
+writable/*
+
+# Cache files
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/temp/*
+
+# Uploads
+writable/uploads/*
+
+# Vendor
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swo
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# Composer
+composer.phar
+composer.lock
+
+# Tests
+phpunit.xml
+tests/_output/
+tests/_support/_generated/
+
+# Git
+.gitignore
+
+# Project specific
+/public/uploads/*
