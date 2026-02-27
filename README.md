@@ -1,61 +1,38 @@
-# CodeIgniter 4 Framework
+# clinic.vindhy.com - डॉक्टर के लिए प्रिस्क्रिप्शन सिस्टम
 
-## What is CodeIgniter?
+## 🏥 प्रोजेक्ट के बारे में
+यह एक वेब-बेस्ड प्रिस्क्रिप्शन सिस्टम है जो डॉक्टर्स को मरीजों का रिकॉर्ड रखने, प्रिस्क्रिप्शन जेनरेट करने और संतुष्टि ट्रैक करने में मदद करता है।
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## ✨ मुख्य फीचर्स
+- 📝 प्रिस्क्रिप्शन जनरेशन (Morning/Evening/Noon डोज़ के साथ)
+- 🔄 पेशेंट हिस्ट्री (पुरानी विजिट का रिकॉर्ड)
+- 🖨️ प्रिंट-फ्रेंडली प्रिस्क्रिप्शन
+- 👥 रिसेप्शनिस्ट मॉड्यूल (बुकिंग अलॉटमेंट)
+- 😊 संतुष्टि ट्रैकर (डॉक्टर की खुद की परफॉर्मेंस ट्रैकिंग)
+- 📊 डैशबोर्ड और रिपोर्ट्स
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🛠️ टेक स्टैक
+- फ्रंटएंड: HTML5, CSS3, Bootstrap 5, JavaScript
+- बैकएंड: PHP (कोर PHP)
+- डेटाबेस: MySQL
+- लाइब्रेरी: Chart.js, Bootstrap Icons
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## 📦 इंस्टॉलेशन
+1. क्लोन करें: `git clone https://github.com/आपका-यूजरनेम/clinic.vindhy.com.git`
+2. डेटाबेस इम्पोर्ट करें: `database.sql` फाइल को phpMyAdmin में अपलोड करें
+3. कॉन्फिगरेशन: `config.php` में डेटाबेस डिटेल अपडेट करें
+4. लोकल सर्वर पर चलाएँ: `http://localhost/clinic.vindhy.com`
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## 📸 स्क्रीनशॉट
+(अपने प्रोजेक्ट के कुछ स्क्रीनशॉट यहाँ लगाएँ)
 
-## Important Change with index.php
+## 🚀 फ्यूचर प्लान्स
+- SMS रिमाइंडर
+- लैब रिपोर्ट अटैचमेंट
+- बिलिंग मॉड्यूल
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 👨‍💻 डेवलपर
+- [आपका नाम] - [आपकी वेबसाइट/लिंक्डइन]
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Contributing
-
-We welcome contributions from the community.
-
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
-
-## Server Requirements
-
-PHP version 8.2 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## 📄 लाइसेंस
+MIT लाइसेंस - देखें [LICENSE](LICENSE) फाइल
