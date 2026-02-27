@@ -163,4 +163,100 @@ class PatientModel extends Model
             return 0;
         return $this->whereIn('doctor_id', $doctorIds)->countAllResults();
     }
+
+    // ----------------------------------------------------------------
+    // Admin: Filtered Queries (doctor + date range)
+    // ----------------------------------------------------------------
+
+    /**
+     * Build date range WHERE clause for the builder.
+     */
+    private function applyDateRange($builder, string $dateRange, string $fromDate = '', string $toDate = '')
+    {
+        switch ($dateRange) {
+            case 'today':
+                $builder->where('DATE(patients.created_at)', date('Y-m-d'));
+                break;
+            case 'yesterday':
+                $builder->where('DATE(patients.created_at)', date('Y-m-d', strtotime('-1 day')));
+                break;
+            case 'this_week':
+                $builder->where('YEARWEEK(patients.created_at, 1) = YEARWEEK(CURDATE(), 1)', null, false);
+                break;
+            case 'last_week':
+                $builder->where('YEARWEEK(patients.created_at, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1)', null, false);
+                break;
+            case 'this_month':
+                $builder->where('MONTH(patients.created_at) = MONTH(CURDATE())', null, false)
+                    ->where('YEAR(patients.created_at) = YEAR(CURDATE())', null, false);
+                break;
+            case 'last_month':
+                $builder->where('MONTH(patients.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)', null, false)
+                    ->where('YEAR(patients.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH)', null, false);
+                break;
+            case 'custom':
+                if (!empty($fromDate)) {
+                    $builder->where('DATE(patients.created_at) >=', $fromDate);
+                }
+                if (!empty($toDate)) {
+                    $builder->where('DATE(patients.created_at) <=', $toDate);
+                }
+                break;
+        // 'all' — no filter
+        }
+        return $builder;
+    }
+
+    /**
+     * Get filtered patients for admin (doctor + date range).
+     */
+    public function getFiltered(
+        string $doctorId = 'all',
+        string $dateRange = 'all',
+        string $fromDate = '',
+        string $toDate = '',
+        string $search = ''
+        ): array
+    {
+        $builder = $this->select('patients.*, u.full_name AS doctor_name')
+            ->join('users u', 'u.id = patients.doctor_id');
+
+        if ($doctorId !== 'all' && is_numeric($doctorId)) {
+            $builder->where('patients.doctor_id', (int)$doctorId);
+        }
+
+        $builder = $this->applyDateRange($builder, $dateRange, $fromDate, $toDate);
+
+        if (!empty($search)) {
+            $builder->groupStart()
+                ->like('patients.full_name', $search)
+                ->orLike('patients.mobile', $search)
+                ->orLike('patients.uhid', $search)
+                ->groupEnd();
+        }
+
+        return $builder->orderBy('patients.created_at', 'DESC')->findAll();
+    }
+
+    /**
+     * Count filtered patients for admin.
+     */
+    public function countFiltered(
+        string $doctorId = 'all',
+        string $dateRange = 'all',
+        string $fromDate = '',
+        string $toDate = ''
+        ): int
+    {
+        $builder = $this->select('patients.id')
+            ->join('users u', 'u.id = patients.doctor_id');
+
+        if ($doctorId !== 'all' && is_numeric($doctorId)) {
+            $builder->where('patients.doctor_id', (int)$doctorId);
+        }
+
+        $builder = $this->applyDateRange($builder, $dateRange, $fromDate, $toDate);
+
+        return $builder->countAllResults();
+    }
 }

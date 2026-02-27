@@ -51,6 +51,7 @@ $routes->group('admin', [
     $routes->post('mapping/store', 'Mapping::store');
     $routes->get('mapping/delete/(:num)/(:num)', 'Mapping::delete/$1/$2');
     $routes->get('patients', 'Patients::index');
+    $routes->get('patients/filter', 'Patients::getFilteredPatients');
     $routes->get('patients/view/(:num)', 'Patients::view/$1');
     $routes->get('reports', 'Reports::index');
 });
