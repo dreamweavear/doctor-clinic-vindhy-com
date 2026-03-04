@@ -14,6 +14,16 @@ $routes->get('/', function () {
 });
 
 // ============================================================
+// LEGAL PAGES (public — no auth required)
+// ============================================================
+$routes->get('privacy-policy', 'LegalPages::privacyPolicy');
+$routes->get('terms-conditions', 'LegalPages::termsConditions');
+$routes->get('cookie-policy', 'LegalPages::cookiePolicy');
+$routes->get('disclaimer', 'LegalPages::disclaimer');
+$routes->get('contact', 'LegalPages::contact');
+$routes->post('contact', 'LegalPages::contact');
+
+// ============================================================
 // PUBLIC ROUTES (no auth needed)
 // Auth controller is in default namespace App\Controllers
 // ============================================================

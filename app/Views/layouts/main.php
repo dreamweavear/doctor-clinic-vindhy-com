@@ -143,5 +143,60 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('sho
 setTimeout(function(){document.querySelectorAll('.alert.alert-dismissible.fade.show').forEach(function(el){var a=bootstrap.Alert.getInstance(el)||new bootstrap.Alert(el);a.close()})},5000)
 </script>
 <?= $this->renderSection('scripts') ?>
+
+<!-- ── Legal Footer ───────────────────────────────────────── -->
+<footer style="margin-left:var(--sidebar-width);transition:margin-left .3s;background:#f8fafc;border-top:1px solid #e2e8f0;padding:.75rem 1.5rem;font-size:.75rem;color:#64748b;" id="main-footer">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span><i class="fas fa-hospital-alt me-1 text-primary"></i> &copy; 2026 <strong>clinic.vindhy.com</strong> &nbsp;|&nbsp; सर्वाधिकार सुरक्षित</span>
+        <span>
+            <a href="/privacy-policy" target="_blank" class="text-muted text-decoration-none me-2">Privacy</a>
+            <a href="/terms-conditions" target="_blank" class="text-muted text-decoration-none me-2">Terms</a>
+            <a href="/disclaimer" target="_blank" class="text-muted text-decoration-none me-2">Disclaimer</a>
+            <a href="/cookie-policy" target="_blank" class="text-muted text-decoration-none me-2">Cookies</a>
+            <a href="/contact" target="_blank" class="text-muted text-decoration-none">Contact</a>
+        </span>
+    </div>
+</footer>
+
+<!-- ── Cookie Consent Banner ──────────────────────────────── -->
+<div id="cookieConsent" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(15,23,42,.96);color:#e2e8f0;padding:.75rem 1.5rem;border-top:2px solid #2563eb;">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <p class="mb-0" style="font-size:.82rem;">
+            🍪 यह वेबसाइट सेशन सुरक्षित रखने के लिए आवश्यक कुकी उपयोग करती है।
+            <a href="/cookie-policy" target="_blank" class="text-warning text-decoration-none ms-2">और जानें</a>
+        </p>
+        <div class="d-flex gap-2">
+            <button id="acceptCookies" class="btn btn-sm btn-success px-3" style="font-size:.8rem;">✅ स्वीकार करें</button>
+            <button id="rejectCookies" class="btn btn-sm btn-outline-light px-3" style="font-size:.8rem;">अस्वीकार</button>
+        </div>
+    </div>
+</div>
+<script>
+(function(){
+    if(!localStorage.getItem('cookieConsent')){
+        document.getElementById('cookieConsent').style.display='block';
+    }
+    document.getElementById('acceptCookies').onclick=function(){
+        localStorage.setItem('cookieConsent','accepted');
+        document.getElementById('cookieConsent').style.display='none';
+    };
+    document.getElementById('rejectCookies').onclick=function(){
+        localStorage.setItem('cookieConsent','rejected');
+        document.getElementById('cookieConsent').style.display='none';
+    };
+    // Keep footer left margin in sync with sidebar
+    var sidebar=document.getElementById('sidebar');
+    var footer=document.getElementById('main-footer');
+    if(sidebar && footer){
+        var ob=new MutationObserver(function(){
+            footer.style.marginLeft = sidebar.classList.contains('show') ? 'var(--sidebar-width)' : (window.innerWidth < 992 ? '0' : 'var(--sidebar-width)');
+        });
+        ob.observe(sidebar, {attributes:true, attributeFilter:['class']});
+        window.addEventListener('resize', function(){
+            footer.style.marginLeft = window.innerWidth < 992 ? '0' : 'var(--sidebar-width)';
+        });
+    }
+})();
+</script>
 </body>
 </html>

@@ -65,10 +65,20 @@ class Patients extends BaseController
                 ->with('error', 'Invalid doctor selection. You can only register patients for your assigned doctors.');
         }
 
+        // ── Consent validation ──────────────────────────────────
+        if (
+            !$this->request->getPost('privacyConsent') ||
+            !$this->request->getPost('termsConsent')   ||
+            !$this->request->getPost('dataConsent')
+        ) {
+            return redirect()->back()->withInput()
+                ->with('error', 'सभी जरूरी सहमति (Privacy, Terms, Data) देना अनिवार्य है। / All required consents must be provided.');
+        }
+
         $rules = [
             'full_name' => 'required|max_length[200]',
-            'gender' => 'required|in_list[male,female,other]',
-            'mobile' => 'permit_empty|max_length[15]',
+            'gender'    => 'required|in_list[male,female,other]',
+            'mobile'    => 'permit_empty|max_length[15]',
             'doctor_id' => 'required|is_natural_no_zero',
         ];
 
@@ -79,17 +89,17 @@ class Patients extends BaseController
         $uhid = $this->patientModel->generateUHID();
 
         $data = [
-            'doctor_id' => $doctorId,
-            'uhid' => $uhid,
-            'full_name' => $this->request->getPost('full_name'),
-            'gender' => $this->request->getPost('gender'),
-            'dob' => $this->request->getPost('dob') ?: null,
-            'age' => $this->request->getPost('age') ?: null,
-            'mobile' => $this->request->getPost('mobile'),
-            'email' => $this->request->getPost('email'),
-            'address' => $this->request->getPost('address'),
-            'blood_group' => $this->request->getPost('blood_group'),
-            'allergies' => $this->request->getPost('allergies'),
+            'doctor_id'    => $doctorId,
+            'uhid'         => $uhid,
+            'full_name'    => $this->request->getPost('full_name'),
+            'gender'       => $this->request->getPost('gender'),
+            'dob'          => $this->request->getPost('dob') ?: null,
+            'age'          => $this->request->getPost('age') ?: null,
+            'mobile'       => $this->request->getPost('mobile'),
+            'email'        => $this->request->getPost('email'),
+            'address'      => $this->request->getPost('address'),
+            'blood_group'  => $this->request->getPost('blood_group'),
+            'allergies'    => $this->request->getPost('allergies'),
             'registered_by' => $this->receptionistId,
         ];
 
@@ -98,6 +108,24 @@ class Patients extends BaseController
         if (!$patientId) {
             return redirect()->back()->withInput()
                 ->with('error', 'Failed to register patient. Please try again.');
+        }
+
+        // ── Save consent record ─────────────────────────────────
+        try {
+            $db = \Config\Database::connect();
+            $db->table('patient_consents')->insert([
+                'patient_id'        => $patientId,
+                'privacy_consent'   => 1,
+                'terms_consent'     => 1,
+                'data_consent'      => 1,
+                'marketing_consent' => $this->request->getPost('marketingConsent') ? 1 : 0,
+                'abdm_consent'      => 0,
+                'consent_date'      => date('Y-m-d H:i:s'),
+                'ip_address'        => $this->request->getIPAddress(),
+                'user_agent'        => $this->request->getUserAgent()->getAgentString(),
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Consent save failed: ' . $e->getMessage());
         }
 
         return redirect()->to(base_url("receptionist/visits/create/{$patientId}"))
