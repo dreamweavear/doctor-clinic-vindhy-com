@@ -7,11 +7,10 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // ============================================================
-// ROOT -> redirect to login
+// ROOT -> Home page
 // ============================================================
-$routes->get('/', function () {
-    return redirect()->to(base_url('auth/login'));
-});
+$routes->get('/', 'Home::index');
+
 
 // ============================================================
 // LEGAL PAGES (public — no auth required)
